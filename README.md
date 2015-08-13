@@ -1,2 +1,2 @@
 # Urho3DQtemplate
-This is an unlicensed Urho3D QtCreator project template. Free for anyone to use.
+This is an MIT licensed Urho3D QtCreator project template. Free for anyone to use.

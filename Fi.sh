@@ -1,8 +1,7 @@
 #LucKey Productions GameDev install script
-sudo apt-get update
-sudo apt-get install -y git qtcreator blender inkscape gimp qjackctl hydrogen rakarrack audacity
-sudo apt-get update
-sudo apt-get upgrade -y
+#sudo apt-get install -y git qtcreator blender inkscape gimp qjackctl hydrogen rakarrack audacity
+#sudo apt-get update
+#sudo apt-get upgrade -y
 
 if [ ! -d ~/GameDev ]
 then
@@ -41,7 +40,6 @@ then
   ln -s ../Urho3D/bin/CoreData
   ln -s ../Urho3DQtemplate/Resources
   cd ..
-
 fi
 
 cd Urho3DQtemplate

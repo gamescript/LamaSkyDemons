@@ -1,8 +1,6 @@
-#LucKey Productions "So you want to be a game dev?" install script for Xubuntu
-sudo add-apt-repository -y ppa:ravefinity-project/ppa
+#LucKey Productions GameDev install script
 sudo apt-get update
-sudo apt-get remove -y ristretto abiword gnumetric
-sudo apt-get install -y git qtcreator blender inkscape gimp qjackctl hydrogen rakarrack audacity libreoffice eog vlc redshift redshift-gtk vibrancy-colors
+sudo apt-get install -y git qtcreator blender inkscape gimp qjackctl hydrogen rakarrack audacity
 sudo apt-get update
 sudo apt-get upgrade -y
 
@@ -47,4 +45,5 @@ then
 fi
 
 cd Urho3DQtemplate
+git pull origin master
 qtcreator Urho3DQtemplate.pro

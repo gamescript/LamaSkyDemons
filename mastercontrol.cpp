@@ -159,8 +159,7 @@ void MasterControl::HandleUpdate(StringHash eventType, VariantMap &eventData)
 
 void MasterControl::HandleSceneUpdate(StringHash eventType, VariantMap &eventData)
 {
-    using namespace SceneUpdate;
-    float timeStep = eventData[P_TIMESTEP].GetFloat();
+    float timeStep = eventData[SceneUpdate::P_TIMESTEP].GetFloat();
     movingLight_->Translate(Vector3::RIGHT*sin(world.scene->GetElapsedTime()*0.23)*0.1f);
 }
 

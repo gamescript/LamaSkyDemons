@@ -111,17 +111,30 @@ void MasterControl::CreateScene()
     PhysicsWorld* physicsWorld = world.scene->CreateComponent<PhysicsWorld>();
 //    physicsWorld->SetGravity(Vector3::ZERO);
 
-    //Create a directional light to the world. Enable cascaded shadows on it
+    //Add a directional light to the world. Enable cascaded shadows on it
     Node* lightNode = world.scene->CreateChild("DirectionalLight");
     lightNode->SetPosition(Vector3(-5.0f, 10.0f, -7.0f));
     lightNode->LookAt(Vector3(0.0f, 0.0f, 0.0f));
-    Light* light = lightNode->CreateComponent<Light>();
-    light->SetLightType(LIGHT_DIRECTIONAL);
-    light->SetBrightness(0.9f);
-    light->SetColor(Color(0.8f, 0.95f, 0.9f));
-    light->SetCastShadows(true);
-    light->SetShadowBias(BiasParameters(0.00025f, 0.5f));
-    light->SetShadowCascade(CascadeParameters(7.0f, 23.0f, 42.0f, 500.0f, 0.8f));
+    Light* sun = lightNode->CreateComponent<Light>();
+    sun->SetLightType(LIGHT_DIRECTIONAL);
+    sun->SetBrightness(0.23f);
+    sun->SetColor(Color(0.8f, 0.9f, 0.95f));
+    sun->SetCastShadows(true);
+    sun->SetShadowBias(BiasParameters(0.00025f, 0.5f));
+    sun->SetShadowCascade(CascadeParameters(7.0f, 23.0f, 42.0f, 500.0f, 0.8f));
+
+    //Create a point light. Enable cascaded shadows on it
+    movingLight_ = world.scene->CreateChild("PointLight");
+    movingLight_->SetPosition(Vector3(-23.0f, 10.0f, -7.0f));
+    Light* fireFly = movingLight_->CreateComponent<Light>();
+    fireFly->SetLightType(LIGHT_POINT);
+    fireFly->SetBrightness(0.666f);
+    fireFly->SetRange(42.0f);
+    fireFly->SetColor(Color(1.23f, 1.0f, 0.5f));
+    fireFly->SetCastShadows(true);
+    fireFly->SetShadowBias(BiasParameters(0.00025f, 0.5f));
+    fireFly->SetShadowCascade(CascadeParameters(7.0f, 23.0f, 42.0f, 500.0f, 0.8f));
+
 
     //Create some Kekelplithfs
     for (int k = 0; k < 5; k++){
@@ -148,6 +161,7 @@ void MasterControl::HandleSceneUpdate(StringHash eventType, VariantMap &eventDat
 {
     using namespace SceneUpdate;
     float timeStep = eventData[P_TIMESTEP].GetFloat();
+    movingLight_->Translate(Vector3::RIGHT*sin(world.scene->GetElapsedTime()*0.23)*0.1f);
 }
 
 void MasterControl::HandlePostRenderUpdate(StringHash eventType, VariantMap &eventData)

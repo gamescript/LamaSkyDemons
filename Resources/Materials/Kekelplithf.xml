@@ -1,6 +1,18 @@
+<?xml version="1.0"?>
 <material>
-	<technique name="CoreData/Techniques/DiffNormalSpec.xml" quality="1"/>
-	<texture name="Resources/Textures/KekelplithfDiffuse.png" unit="diffuse"/>
-	<texture name="Resources/Textures/KekelplithfNormals.png" unit="normal"/>
-	<texture name="Resources/Textures/KekelplithfSpecular.png" unit="specular"/>
+	<technique name="Techniques/DiffNormalSpec.xml" quality="1" loddistance="0" />
+	<texture unit="diffuse" name="Resources/Textures/KekelplithfDiffuse.png" />
+	<texture unit="normal" name="Resources/Textures/KekelplithfNormals.png" />
+	<texture unit="specular" name="Resources/Textures/KekelplithfSpecular.png" />
+	<parameter name="UOffset" value="1 0 0 0" />
+	<parameter name="VOffset" value="0 1 0 0" />
+	<parameter name="MatDiffColor" value="1 1 1 1" />
+	<parameter name="MatEmissiveColor" value="0 0 0" />
+	<parameter name="MatEnvMapColor" value="1 1 1" />
+	<parameter name="MatSpecColor" value="0 0 0 1" />
+	<cull value="ccw" />
+	<shadowcull value="ccw" />
+	<fill value="solid" />
+	<depthbias constant="0" slopescaled="0" />
+	<renderorder value="128" />
 </material>

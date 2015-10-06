@@ -143,6 +143,8 @@ private:
     bool CursorRayCast(float maxDistance, PODVector<RayQueryResult> &hitResults);
 
     bool paused_;
+
+    Node* movingLight_;
 };
 
 #endif // MASTERCONTROL_H

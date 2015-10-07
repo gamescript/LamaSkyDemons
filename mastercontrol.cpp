@@ -109,7 +109,6 @@ void MasterControl::CreateScene()
     world.scene->CreateComponent<DebugRenderer>();
 
     PhysicsWorld* physicsWorld = world.scene->CreateComponent<PhysicsWorld>();
-//    physicsWorld->SetGravity(Vector3::ZERO);
 
     //Add a directional light to the world. Enable cascaded shadows on it
     Node* lightNode = world.scene->CreateChild("DirectionalLight");
@@ -135,7 +134,6 @@ void MasterControl::CreateScene()
     fireFly->SetShadowBias(BiasParameters(0.00025f, 0.5f));
     fireFly->SetShadowCascade(CascadeParameters(7.0f, 23.0f, 42.0f, 500.0f, 0.8f));
 
-
     //Create some Kekelplithfs
     for (int k = 0; k < 5; k++){
         Node* objectNode = world.scene->CreateChild("Kekelplithf");
@@ -160,7 +158,7 @@ void MasterControl::HandleUpdate(StringHash eventType, VariantMap &eventData)
 void MasterControl::HandleSceneUpdate(StringHash eventType, VariantMap &eventData)
 {
     float timeStep = eventData[SceneUpdate::P_TIMESTEP].GetFloat();
-    movingLight_->Translate(Vector3::RIGHT*sin(world.scene->GetElapsedTime()*0.23)*0.1f);
+    movingLight_->Translate(Vector3::RIGHT*sin(world.scene->GetElapsedTime()*0.23f)*0.23f);
 }
 
 void MasterControl::HandlePostRenderUpdate(StringHash eventType, VariantMap &eventData)
@@ -171,41 +169,3 @@ void MasterControl::Exit()
 {
     engine_->Exit();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

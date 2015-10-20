@@ -1,4 +1,4 @@
-// LucKey Productions Urho3D Project Template
+/* LucKey Productions Urho3D Project Template
 //
 // This is free and unencumbered software released into the public domain.
 //
@@ -24,6 +24,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 //
 // For more information, please refer to <http://unlicense.org/>
+*/
 
 #ifndef MASTERCONTROL_H
 #define MASTERCONTROL_H
@@ -51,6 +52,10 @@
 #include <Urho3D/Graphics/RenderPath.h>
 #include <Urho3D/Graphics/StaticModel.h>
 #include <Urho3D/Graphics/Viewport.h>
+
+#include <Urho3D/Graphics/VertexBuffer.h>
+#include <Urho3D/ThirdParty/SDL/SDL_log.h>
+
 #include <Urho3D/Input/Input.h>
 #include <Urho3D/IO/FileSystem.h>
 #include <Urho3D/IO/Log.h>
@@ -59,8 +64,6 @@
 #include <Urho3D/Physics/PhysicsWorld.h>
 #include <Urho3D/Physics/RigidBody.h>
 #include <Urho3D/Resource/ResourceCache.h>
-#include <Urho3D/Resource/Resource.h>
-#include <Urho3D/Resource/XMLFile.h>
 #include <Urho3D/Scene/Node.h>
 #include <Urho3D/Scene/SceneEvents.h>
 #include <Urho3D/Scene/Scene.h>
@@ -125,26 +128,14 @@ public:
 
     void Exit();
 private:
-    SharedPtr<UI> ui_;
-    SharedPtr<Renderer> renderer_;
-    SharedPtr<XMLFile> defaultStyle_;
+    Node* movingLightNode_;
 
-    void CreateConsoleAndDebugHud();
     void CreateScene();
-    void CreateUI();
-    void SubscribeToEvents();
 
-    void HandleSceneUpdate(StringHash eventType, VariantMap& eventData);
     void HandleUpdate(StringHash eventType, VariantMap& eventData);
-    void HandlePostRenderUpdate(StringHash eventType, VariantMap& eventData);
-
-    void CreatePlatform(const Vector3 pos);
-    void UpdateCursor(float timeStep);
-    bool CursorRayCast(float maxDistance, PODVector<RayQueryResult> &hitResults);
 
     bool paused_;
 
-    Node* movingLight_;
 };
 
 #endif // MASTERCONTROL_H

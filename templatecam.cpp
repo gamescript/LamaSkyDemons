@@ -1,3 +1,4 @@
+/*
 // LucKey Productions Urho3D Project Template
 //
 // This is free and unencumbered software released into the public domain.
@@ -24,6 +25,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 //
 // For more information, please refer to <http://unlicense.org/>
+*/
 
 #include "templatecam.h"
 
@@ -31,7 +33,6 @@ TemplateCam::TemplateCam(Context *context, MasterControl *masterControl):
     Object(context)
 {
     masterControl_ = masterControl;
-    SubscribeToEvent(E_SCENEUPDATE, HANDLER(TemplateCam, HandleSceneUpdate));
 
     rootNode_ = masterControl_->world.scene->CreateChild("Camera");
     camera_ = rootNode_->CreateComponent<Camera>();
@@ -71,12 +72,3 @@ Quaternion TemplateCam::GetRotation()
 {
     return rootNode_->GetRotation();
 }
-
-void TemplateCam::HandleSceneUpdate(StringHash eventType, VariantMap &eventData)
-{
-    using namespace Update;
-
-    //Take the frame time step, which is stored as a float
-    float timeStep = eventData[P_TIMESTEP].GetFloat();
-}
-

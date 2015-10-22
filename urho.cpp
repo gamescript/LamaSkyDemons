@@ -32,7 +32,7 @@ Urho::Urho(Context* context, MasterControl* masterControl):
     Object(context),
     masterControl_{masterControl},
     velocity_{Vector3::ZERO},
-    maxVelocity_{16.0f},
+    maxVelocity_{12.0f},
     target_{Vector3::LEFT},
     seenTarget_{false}
 {
@@ -40,10 +40,14 @@ Urho::Urho(Context* context, MasterControl* masterControl):
     rootNode_->SetRotation(Quaternion(0.0f, 90.0f, 0.0f));
     rootNode_->SetScale(1.0f);
 
-    staticModel_ = rootNode_->CreateComponent<StaticModel>();
-    staticModel_->SetModel(masterControl_->cache_->GetResource<Model>("Resources/Models/Urho.mdl"));
-    staticModel_->SetMaterial(masterControl_->cache_->GetResource<Material>("Resources/Materials/VCol.xml"));
-    staticModel_->SetCastShadows(true);
+    animatedModel_ = rootNode_->CreateComponent<AnimatedModel>();
+    animatedModel_->SetModel(masterControl_->cache_->GetResource<Model>("Resources/Models/Urho.mdl"));
+    animatedModel_->SetMaterial(masterControl_->cache_->GetResource<Material>("Resources/Materials/VCol.xml"));
+    animatedModel_->SetCastShadows(true);
+
+    animCtrl_ = rootNode_->CreateComponent<AnimationController>();
+    animCtrl_->PlayExclusive("Resources/Models/Swim.ani", 0, true, 0.23f);
+
 
     SubscribeToEvent(E_UPDATE, HANDLER(Urho, HandleUpdate));
 }
@@ -75,6 +79,8 @@ void Urho::Swim(float timeStep)
         aimRotation.FromLookRotation(velocity_);
         rootNode_->SetRotation(rotation.Slerp(aimRotation, timeStep * velocity_.Length()));
     }
+    //Update animation speed
+    animCtrl_->SetSpeed("Resources/Models/Swim.ani", 4.2f*velocity_.Length()/maxVelocity_);
 }
 Vector3 Urho::SwimTarget()
 {

@@ -41,7 +41,8 @@ public:
 private:
     MasterControl* masterControl_;
     Node* rootNode_;
-    StaticModel* staticModel_;
+    AnimatedModel* animatedModel_;
+    AnimationController* animCtrl_;
 
     Vector3 velocity_;
     float maxVelocity_;

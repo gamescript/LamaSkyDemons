@@ -41,7 +41,7 @@ MasterControl::MasterControl(Context *context):
 void MasterControl::Setup()
 {
     engineParameters_["WindowTitle"] = "LucKey Productions Urho3D Project Template";
-    engineParameters_["LogName"] = GetSubsystem<FileSystem>()->GetAppPreferencesDir("urho3d", "logs")+"TestVoxelWidget.log";
+    engineParameters_["LogName"] = GetSubsystem<FileSystem>()->GetAppPreferencesDir("urho3d", "logs")+"LucKeyTemplate.log";
 //    engineParameters_["FullScreen"] = false;
 //    engineParameters_["WindowWidth"] = 960;
 //    engineParameters_["WindowHeight"] = 540;

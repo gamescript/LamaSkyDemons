@@ -40,10 +40,10 @@ Urho::Urho(Context* context, MasterControl* masterControl):
     rootNode_->SetRotation(Quaternion(0.0f, 90.0f, 0.0f));
     rootNode_->SetScale(1.0f);
 
-    animatedModel_ = rootNode_->CreateComponent<StaticModel>();
-    animatedModel_->SetModel(masterControl_->cache_->GetResource<Model>("Resources/Models/Urho.mdl"));
-    animatedModel_->SetMaterial(masterControl_->cache_->GetResource<Material>("Resources/Materials/VCol.xml"));
-    animatedModel_->SetCastShadows(true);
+    staticModel_ = rootNode_->CreateComponent<StaticModel>();
+    staticModel_->SetModel(masterControl_->cache_->GetResource<Model>("Resources/Models/Urho.mdl"));
+    staticModel_->SetMaterial(masterControl_->cache_->GetResource<Material>("Resources/Materials/VCol.xml"));
+    staticModel_->SetCastShadows(true);
 
     SubscribeToEvent(E_UPDATE, HANDLER(Urho, HandleUpdate));
 }

@@ -38,7 +38,6 @@ MasterControl::MasterControl(Context *context):
 {
 }
 
-
 void MasterControl::Setup()
 {
     engineParameters_["WindowTitle"] = "LucKey Productions Urho3D Project Template";
@@ -63,13 +62,18 @@ void MasterControl::Exit()
     engine_->Exit();
 }
 
+
 void MasterControl::CreateScene()
 {
     world.scene = new Scene(context_);
     world.scene->CreateComponent<Octree>();
-    //Create camera
     world.camera = new TemplateCam(context_, this);
+    CreateLights();
+    new Urho(context_, this);
+}
 
+void MasterControl::CreateLights()
+{
     //Add a directional light to the world. Enable cascaded shadows on it
     Node* lightNode = world.scene->CreateChild("DirectionalLight");
     lightNode->SetPosition(Vector3(-5.0f, 10.0f, -7.0f));
@@ -94,6 +98,4 @@ void MasterControl::CreateScene()
     movingLight->SetShadowBias(BiasParameters(0.00023f, 0.1f));
     movingLight->SetShadowCascade(CascadeParameters(0.1f, 1.0f, 5.0f, 10.0f, 0.5f));
     movingLight->SetShadowResolution(1.0f);
-
-    new Urho(context_, this);
 }

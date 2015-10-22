@@ -73,6 +73,7 @@ public:
     virtual void Stop();
 
     void Exit();
+    void CreateLights();
 private:
     Node* movingLightNode_;
 

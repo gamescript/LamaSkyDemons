@@ -29,6 +29,7 @@
 #ifndef URHO_H
 #define URHO_H
 
+#include <Urho3D/Urho3D.h>
 #include "mastercontrol.h"
 
 class Urho : public Object
@@ -40,7 +41,7 @@ public:
 private:
     MasterControl* masterControl_;
     Node* rootNode_;
-    StaticModel* animatedModel_;
+    StaticModel* staticModel_;
 
     Vector3 velocity_;
     float maxVelocity_;

@@ -26,59 +26,29 @@
 // For more information, please refer to <http://unlicense.org/>
 */
 
-#ifndef MASTERCONTROL_H
-#define MASTERCONTROL_H
+#ifndef URHO_H
+#define URHO_H
 
-#include <Urho3D/Urho3D.h>
-#include "luckey.h"
+#include "mastercontrol.h"
 
-namespace Urho3D {
-class Drawable;
-class Node;
-class Scene;
-class Sprite;
-}
-
-using namespace Urho3D;
-
-class TemplateCam;
-class InputMaster;
-
-typedef struct GameWorld
+class Urho : public Object
 {
-    SharedPtr<TemplateCam> camera;
-    SharedPtr<Scene> scene;
-    struct {
-        SharedPtr<Node> sceneCursor;
-        SharedPtr<Cursor> uiCursor;
-        PODVector<RayQueryResult> hitResults;
-    } cursor;
-} GameWorld;
-
-class MasterControl : public Application
-{
-    OBJECT(MasterControl);
-    friend class InputMaster;
+    OBJECT(Urho);
 public:
-    MasterControl(Context* context);
-    GameWorld world;
-    SharedPtr<ResourceCache> cache_;
-    SharedPtr<Graphics> graphics_;
-
-    /// Setup before engine initialization. Modifies the engine paramaters.
-    virtual void Setup();
-    /// Setup after engine initialization.
-    virtual void Start();
-    /// Cleanup after the main loop. Called by Application.
-    virtual void Stop();
-
-    void Exit();
+    Urho(Context* context, MasterControl* masterControl);
+    void Swim(float timeStep);
 private:
-    Node* movingLightNode_;
+    MasterControl* masterControl_;
+    Node* rootNode_;
+    StaticModel* animatedModel_;
 
-    void CreateScene();
+    Vector3 velocity_;
+    float maxVelocity_;
+    Vector3 target_;
+    bool seenTarget_;
 
-    void HandleUpdate(StringHash eventType, VariantMap& eventData);
+    Vector3 SwimTarget();
+    void HandleUpdate(StringHash eventType, VariantMap &eventData);
 };
 
-#endif // MASTERCONTROL_H
+#endif // URHO_H

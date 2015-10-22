@@ -29,6 +29,7 @@
 #include "mastercontrol.h"
 #include "templatecam.h"
 #include "inputmaster.h"
+#include "urho.h"
 
 DEFINE_APPLICATION_MAIN(MasterControl);
 
@@ -52,7 +53,6 @@ void MasterControl::Start()
     cache_ = GetSubsystem<ResourceCache>();
 
     CreateScene();
-    SubscribeToEvent(E_UPDATE, HANDLER(MasterControl, HandleUpdate));
 }
 void MasterControl::Stop()
 {
@@ -76,41 +76,24 @@ void MasterControl::CreateScene()
     lightNode->LookAt(Vector3(0.0f, 0.0f, 0.0f));
     Light* directionalLight = lightNode->CreateComponent<Light>();
     directionalLight->SetLightType(LIGHT_DIRECTIONAL);
-    directionalLight->SetBrightness(0.23f);
+    directionalLight->SetBrightness(0.666f);
     directionalLight->SetColor(Color(0.8f, 0.9f, 0.95f));
     directionalLight->SetCastShadows(true);
-    directionalLight->SetShadowBias(BiasParameters(0.00025f, 0.5f));
-    directionalLight->SetShadowCascade(CascadeParameters(7.0f, 23.0f, 42.0f, 500.0f, 0.8f));
+    directionalLight->SetShadowBias(BiasParameters(0.000025f, 0.5f));
+    directionalLight->SetShadowCascade(CascadeParameters(1.0f, 5.0f, 23.0f, 100.0f, 0.8f));
 
     //Create a point light. Enable cascaded shadows on it
-    movingLightNode_ = world.scene->CreateChild("MovingLight");
-    movingLightNode_->SetPosition(Vector3(-23.0f, 10.0f, -7.0f));
-    Light* movingLight = movingLightNode_->CreateComponent<Light>();
+    Node* pointLightNode_ = world.scene->CreateChild("MovingLight");
+    pointLightNode_->SetPosition(Vector3(5.0f, -10.0f, -7.0f));
+    Light* movingLight = pointLightNode_->CreateComponent<Light>();
     movingLight->SetLightType(LIGHT_POINT);
-    movingLight->SetBrightness(0.666f);
-    movingLight->SetRange(50.0f);
-    movingLight->SetColor(Color(1.23f, 1.0f, 0.5f));
+    movingLight->SetBrightness(0.23f);
+    movingLight->SetRange(23.0f);
+    movingLight->SetColor(Color(0.5f, 1.23f, 0.75f));
     movingLight->SetCastShadows(true);
     movingLight->SetShadowBias(BiasParameters(0.00023f, 0.1f));
     movingLight->SetShadowCascade(CascadeParameters(0.1f, 1.0f, 5.0f, 10.0f, 0.5f));
     movingLight->SetShadowResolution(1.0f);
 
-    //Create some Kekelplithfs
-    for (int k = 0; k < 5; k++){
-        Node* objectNode = world.scene->CreateChild("Kekelplithf");
-        objectNode->SetPosition((-5.0f + 3.0f*k) * Vector3::RIGHT + 3.0f * Vector3::DOWN + (k%2) * 5.0f * Vector3::FORWARD);
-        objectNode->SetRotation(Quaternion(0.0f, Random(360.0f), 0.0f));
-        objectNode->SetScale(0.23f+Random(0.0f, 0.1f));
-
-        StaticModel* animatedModel = objectNode->CreateComponent<StaticModel>();
-        animatedModel->SetModel(cache_->GetResource<Model>("Resources/Models/Kekelplithf.mdl"));
-        animatedModel->SetMaterial(cache_->GetResource<Material>("Resources/Materials/Kekelplithf.xml"));
-        animatedModel->SetCastShadows(true);
-    }
-}
-
-void MasterControl::HandleUpdate(StringHash eventType, VariantMap &eventData)
-{
-    float timeStep = eventData[SceneUpdate::P_TIMESTEP].GetFloat();
-    movingLightNode_->Translate(Vector3::RIGHT*sin(world.scene->GetElapsedTime()*0.23f)*0.23f);
+    new Urho(context_, this);
 }

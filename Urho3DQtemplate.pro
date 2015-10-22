@@ -17,11 +17,15 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+    luckey.cpp \
     mastercontrol.cpp \
     inputmaster.cpp \
-    templatecam.cpp
+    templatecam.cpp \
+    urho.cpp
 
 HEADERS += \
+    luckey.h \
     mastercontrol.h \
     inputmaster.h \
-    templatecam.h
+    templatecam.h \
+    urho.h

@@ -1,4 +1,4 @@
-// LucKey Productions Urho3D Project Template
+/* LucKey Productions Urho3D Project Template
 //
 // This is free and unencumbered software released into the public domain.
 //
@@ -24,6 +24,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 //
 // For more information, please refer to <http://unlicense.org/>
+*/
 
 #include "inputmaster.h"
 #include "templatecam.h"
@@ -59,7 +60,7 @@ void InputMaster::HandleKeyDown(StringHash eventType, VariantMap &eventData)
         //Here we save in the Data folder with date and time appended
         String fileName = GetSubsystem<FileSystem>()->GetProgramDir() + "Screenshots/Screenshot_" +
                 Time::GetTimeStamp().Replaced(':', '_').Replaced('.', '_').Replaced(' ', '_')+".png";
-        //Log::Write(1, fileName);
+        Log::Write(1, fileName);
         screenshot.SavePNG(fileName);
     } break;
     default: break;
@@ -70,10 +71,6 @@ void InputMaster::HandleKeyUp(StringHash eventType, VariantMap &eventData)
     using namespace KeyUp;
     int key = eventData[P_KEY].GetInt();
     if (pressedKeys_.Contains(key)) pressedKeys_.Erase(key);
-
-    switch (key){
-    default: break;
-    }
 }
 
 void InputMaster::HandleMouseButtonDown(StringHash eventType, VariantMap &eventData)

@@ -1,5 +1,4 @@
-/*
-// LucKey Productions Urho3D Project Template
+/* LucKey Productions Urho3D Project Template
 //
 // This is free and unencumbered software released into the public domain.
 //
@@ -40,6 +39,11 @@ TemplateCam::TemplateCam(Context *context, MasterControl *masterControl):
     rootNode_->SetPosition(Vector3(0.0f, 1.0f, -10.0f));
     rootNode_->SetRotation(Quaternion(10.0f, 0.0f, 0.0f));
 
+    Zone* zone = rootNode_->CreateComponent<Zone>();
+    zone->SetFogStart(5.0f);
+    zone->SetFogEnd(23.0f);
+    zone->SetFogColor(Color(0.1f, 0.27f, 0.23f));
+
     SetupViewport();
 }
 
@@ -55,7 +59,7 @@ void TemplateCam::SetupViewport()
     effectRenderPath_->SetEnabled("FXAA3", true);
     effectRenderPath_->Append(masterControl_->cache_->GetResource<XMLFile>("PostProcess/Bloom.xml"));
     effectRenderPath_->SetShaderParameter("BloomThreshold", 0.23f);
-    effectRenderPath_->SetShaderParameter("BloomMix", Vector2(1.75f, 2.25f));
+    effectRenderPath_->SetShaderParameter("BloomMix", Vector2(1.75f, 1.25f));
     effectRenderPath_->SetEnabled("Bloom", true);
 
     Renderer* renderer = GetSubsystem<Renderer>();

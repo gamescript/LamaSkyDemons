@@ -1,4 +1,4 @@
-// LucKey Productions Urho3D Project Template
+/* LucKey Productions Urho3D Project Template
 //
 // This is free and unencumbered software released into the public domain.
 //
@@ -24,6 +24,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 //
 // For more information, please refer to <http://unlicense.org/>
+*/
 
 #ifndef INPUTMASTER_H
 #define INPUTMASTER_H

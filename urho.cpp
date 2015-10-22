@@ -59,7 +59,7 @@ void Urho::Swim(float timeStep)
     Vector3 targetDelta = target_ - rootNode_->GetPosition();
     bool limit = velocity_.Angle(targetDelta) < 90.0f && velocity_.Length() > maxVelocity_;
     if (!limit) velocity_ += 5.0f * timeStep * targetDelta.Normalized()*Clamp(targetDelta.Length(), 2.0f, 3.0f);
-    if (targetDelta.Angle(rootNode_->GetDirection()) > 90.0f && seenTarget_ || targetDelta.Length() < 0.1f){
+    if (targetDelta.Angle(rootNode_->GetDirection()) > 90.0f && seenTarget_ || targetDelta.Length() < 0.5f){
         target_ = SwimTarget();
         seenTarget_ = false;
     }

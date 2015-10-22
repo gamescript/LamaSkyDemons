@@ -43,6 +43,7 @@ TemplateCam::TemplateCam(Context *context, MasterControl *masterControl):
     zone->SetFogStart(5.0f);
     zone->SetFogEnd(23.0f);
     zone->SetFogColor(Color(0.1f, 0.27f, 0.23f));
+    zone->SetAmbientColor(Color(0.1f, 0.5f, 1.23f));
 
     SetupViewport();
 }

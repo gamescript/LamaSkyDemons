@@ -76,26 +76,32 @@ void MasterControl::CreateLights()
 {
     //Add a directional light to the world. Enable cascaded shadows on it
     Node* lightNode = world.scene->CreateChild("DirectionalLight");
-    lightNode->SetPosition(Vector3(-5.0f, 10.0f, -7.0f));
+    lightNode->SetPosition(Vector3(-2.0f, 10.0f, -5.0f));
     lightNode->LookAt(Vector3(0.0f, 0.0f, 0.0f));
     Light* directionalLight = lightNode->CreateComponent<Light>();
     directionalLight->SetLightType(LIGHT_DIRECTIONAL);
     directionalLight->SetBrightness(0.666f);
     directionalLight->SetColor(Color(0.8f, 0.9f, 0.95f));
     directionalLight->SetCastShadows(true);
+    directionalLight->SetShadowIntensity(0.23f);
     directionalLight->SetShadowBias(BiasParameters(0.000025f, 0.5f));
     directionalLight->SetShadowCascade(CascadeParameters(1.0f, 5.0f, 23.0f, 100.0f, 0.8f));
 
+    //Add a directional light to the world. Enable cascaded shadows on it
+    lightNode = world.scene->CreateChild("DirectionalLight");
+    lightNode->SetPosition(Vector3(3.0f, -10.0f, -5.0f));
+    lightNode->LookAt(Vector3(0.0f, 0.0f, 0.0f));
+    directionalLight = lightNode->CreateComponent<Light>();
+    directionalLight->SetLightType(LIGHT_DIRECTIONAL);
+    directionalLight->SetBrightness(0.5);
+    directionalLight->SetColor(Color(0.23f, 0.666f, 1.0f));
+
     //Create a point light. Enable cascaded shadows on it
     Node* pointLightNode_ = world.scene->CreateChild("MovingLight");
-    pointLightNode_->SetPosition(Vector3(5.0f, -10.0f, -7.0f));
+    pointLightNode_->SetPosition(Vector3(-10.0f, -5.0f, 2.3f));
     Light* movingLight = pointLightNode_->CreateComponent<Light>();
     movingLight->SetLightType(LIGHT_POINT);
     movingLight->SetBrightness(0.23f);
     movingLight->SetRange(23.0f);
     movingLight->SetColor(Color(0.5f, 1.23f, 0.75f));
-    movingLight->SetCastShadows(true);
-    movingLight->SetShadowBias(BiasParameters(0.00023f, 0.1f));
-    movingLight->SetShadowCascade(CascadeParameters(0.1f, 1.0f, 5.0f, 10.0f, 0.5f));
-    movingLight->SetShadowResolution(1.0f);
 }

@@ -37,6 +37,7 @@ Urho::Urho(Context* context, MasterControl* masterControl):
     seenTarget_{false}
 {
     rootNode_ = masterControl_->world.scene->CreateChild("Urho");
+    rootNode_->SetPosition(Vector3(7.0f, -1.0f, 16.0f));
     rootNode_->SetRotation(Quaternion(0.0f, 90.0f, 0.0f));
     rootNode_->SetScale(1.0f);
 
@@ -61,8 +62,17 @@ void Urho::HandleUpdate(StringHash eventType, VariantMap &eventData)
 void Urho::Swim(float timeStep)
 {
     Vector3 targetDelta = target_ - rootNode_->GetPosition();
+
+    //Accellerate
     bool limit = velocity_.Angle(targetDelta) < 90.0f && velocity_.Length() > maxVelocity_;
-    if (!limit) velocity_ += 5.0f * timeStep * targetDelta.Normalized()*Clamp(targetDelta.Length(), 2.0f, 3.0f);
+    if (!limit) {
+        float swimFactor = pow( sin(0.42 * masterControl_->world.scene->GetElapsedTime()), 4.0 );
+        swimFactor *= swimFactor;
+        float angleFactor = rootNode_->GetDirection().Angle(targetDelta)*0.0023f;
+        swimFactor = 3.0f * Clamp(5.0f * swimFactor - angleFactor + 0.23f * targetDelta.Length(), 0.23f, 2.0f);
+        velocity_ += swimFactor * timeStep * targetDelta.Normalized();
+    }
+    //Check target visibility and distance
     if (targetDelta.Angle(rootNode_->GetDirection()) > 90.0f && seenTarget_ || targetDelta.Length() < 0.5f){
         target_ = SwimTarget();
         seenTarget_ = false;

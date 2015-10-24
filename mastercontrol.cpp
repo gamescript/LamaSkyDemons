@@ -52,6 +52,15 @@ void MasterControl::Start()
     cache_ = GetSubsystem<ResourceCache>();
 
     CreateScene();
+
+
+    //Play music
+    Sound* music = cache_->GetResource<Sound>("Resources/Music/Urho - Disciples of Urho.ogg");
+    music->SetLooped(true);
+    Node* musicNode = world.scene->CreateChild("Music");
+    SoundSource* musicSource = musicNode->CreateComponent<SoundSource>();
+    musicSource->SetSoundType(SOUND_MUSIC);
+    musicSource->Play(music);
 }
 void MasterControl::Stop()
 {
@@ -75,33 +84,33 @@ void MasterControl::CreateScene()
 void MasterControl::CreateLights()
 {
     //Add a directional light to the world. Enable cascaded shadows on it
-    Node* lightNode = world.scene->CreateChild("DirectionalLight");
-    lightNode->SetPosition(Vector3(-2.0f, 10.0f, -5.0f));
-    lightNode->LookAt(Vector3(0.0f, 0.0f, 0.0f));
-    Light* directionalLight = lightNode->CreateComponent<Light>();
-    directionalLight->SetLightType(LIGHT_DIRECTIONAL);
-    directionalLight->SetBrightness(0.666f);
-    directionalLight->SetColor(Color(0.8f, 0.9f, 0.95f));
-    directionalLight->SetCastShadows(true);
-    directionalLight->SetShadowIntensity(0.23f);
-    directionalLight->SetShadowBias(BiasParameters(0.000025f, 0.5f));
-    directionalLight->SetShadowCascade(CascadeParameters(1.0f, 5.0f, 23.0f, 100.0f, 0.8f));
+    Node* downardsLightNode = world.scene->CreateChild("DirectionalLight");
+    downardsLightNode->SetPosition(Vector3(-2.0f, 10.0f, -5.0f));
+    downardsLightNode->LookAt(Vector3(0.0f, 0.0f, 0.0f));
+    Light* downwardsLight = downardsLightNode->CreateComponent<Light>();
+    downwardsLight->SetLightType(LIGHT_DIRECTIONAL);
+    downwardsLight->SetBrightness(0.666f);
+    downwardsLight->SetColor(Color(0.8f, 0.9f, 0.95f));
+    downwardsLight->SetCastShadows(true);
+    downwardsLight->SetShadowIntensity(0.23f);
+    downwardsLight->SetShadowBias(BiasParameters(0.000025f, 0.5f));
+    downwardsLight->SetShadowCascade(CascadeParameters(1.0f, 5.0f, 23.0f, 100.0f, 0.8f));
 
     //Add a directional light to the world. Enable cascaded shadows on it
-    lightNode = world.scene->CreateChild("DirectionalLight");
-    lightNode->SetPosition(Vector3(3.0f, -10.0f, -5.0f));
-    lightNode->LookAt(Vector3(0.0f, 0.0f, 0.0f));
-    directionalLight = lightNode->CreateComponent<Light>();
-    directionalLight->SetLightType(LIGHT_DIRECTIONAL);
-    directionalLight->SetBrightness(0.5);
-    directionalLight->SetColor(Color(0.23f, 0.666f, 1.0f));
+    Node* upwardsLightNode = world.scene->CreateChild("DirectionalLight");
+    upwardsLightNode->SetPosition(Vector3(3.0f, -10.0f, -5.0f));
+    upwardsLightNode->LookAt(Vector3(0.0f, 0.0f, 0.0f));
+    Light* upwardsLight = upwardsLightNode->CreateComponent<Light>();
+    upwardsLight->SetLightType(LIGHT_DIRECTIONAL);
+    upwardsLight->SetBrightness(0.5);
+    upwardsLight->SetColor(Color(0.23f, 0.666f, 1.0f));
 
     //Create a point light. Enable cascaded shadows on it
     Node* pointLightNode_ = world.scene->CreateChild("MovingLight");
-    pointLightNode_->SetPosition(Vector3(-10.0f, -5.0f, 2.3f));
-    Light* movingLight = pointLightNode_->CreateComponent<Light>();
-    movingLight->SetLightType(LIGHT_POINT);
-    movingLight->SetBrightness(0.23f);
-    movingLight->SetRange(23.0f);
-    movingLight->SetColor(Color(0.5f, 1.23f, 0.75f));
+    pointLightNode_->SetPosition(Vector3(0.0f, -1.0f, -13.0f));
+    Light* pointLight = pointLightNode_->CreateComponent<Light>();
+    pointLight->SetLightType(LIGHT_POINT);
+    pointLight->SetBrightness(0.1f);
+    pointLight->SetRange(23.0f);
+    pointLight->SetColor(Color(0.5f, 1.23f, 0.75f));
 }

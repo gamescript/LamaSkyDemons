@@ -36,11 +36,11 @@ TemplateCam::TemplateCam(Context *context, MasterControl *masterControl):
     rootNode_ = masterControl_->world.scene->CreateChild("Camera");
     camera_ = rootNode_->CreateComponent<Camera>();
     camera_->SetFarClip(1024.0f);
-    rootNode_->SetPosition(Vector3(0.0f, 1.0f, -10.0f));
+    rootNode_->SetPosition(Vector3(0.0f, 1.0f, -13.0f));
     rootNode_->SetRotation(Quaternion(10.0f, 0.0f, 0.0f));
 
     Zone* zone = rootNode_->CreateComponent<Zone>();
-    zone->SetFogStart(5.0f);
+    zone->SetFogStart(13.0f);
     zone->SetFogEnd(23.0f);
 
     SetupViewport();

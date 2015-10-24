@@ -37,7 +37,7 @@ Urho::Urho(Context* context, MasterControl* masterControl):
     seenTarget_{false}
 {
     rootNode_ = masterControl_->world.scene->CreateChild("Urho");
-    rootNode_->SetPosition(Vector3(7.0f, -1.0f, 16.0f));
+    rootNode_->SetPosition(Vector3(2.0f, -3.0f, 16.0f));
     rootNode_->SetRotation(Quaternion(0.0f, 90.0f, 0.0f));
     rootNode_->SetScale(1.0f);
 
@@ -64,12 +64,12 @@ void Urho::Swim(float timeStep)
     Vector3 targetDelta = target_ - rootNode_->GetPosition();
 
     //Accellerate
+    float angleFactor = rootNode_->GetDirection().Angle(targetDelta)*0.0023f;
     bool limit = velocity_.Angle(targetDelta) < 90.0f && velocity_.Length() > maxVelocity_;
     if (!limit) {
-        float swimFactor = pow( sin(0.42 * masterControl_->world.scene->GetElapsedTime()), 4.0 );
+        float swimFactor = pow( sin(0.42 * masterControl_->world.scene->GetElapsedTime()), 2.0 );
         swimFactor *= swimFactor;
-        float angleFactor = rootNode_->GetDirection().Angle(targetDelta)*0.0023f;
-        swimFactor = 3.0f * Clamp(5.0f * swimFactor - angleFactor + 0.23f * targetDelta.Length(), 0.23f, 2.0f);
+        swimFactor = 4.2f * Clamp(5.0f * swimFactor - angleFactor + 0.23f * targetDelta.Length(), 0.5f, 2.0f);
         velocity_ += swimFactor * timeStep * targetDelta.Normalized();
     }
     //Check target visibility and distance
@@ -90,15 +90,18 @@ void Urho::Swim(float timeStep)
         rootNode_->SetRotation(rotation.Slerp(aimRotation, timeStep * velocity_.Length()));
     }
     //Update animation speed
-    animCtrl_->SetSpeed("Resources/Models/Swim.ani", 4.2f*velocity_.Length()/maxVelocity_);
+    animCtrl_->SetSpeed("Resources/Models/Swim.ani",
+                        (animCtrl_->GetSpeed("Resources/Models/Swim.ani")+
+                        (4.2f*velocity_.Length()/maxVelocity_)+angleFactor)*0.5f);
 }
 Vector3 Urho::SwimTarget()
 {
-    float extraAngle = 5.0f * rootNode_->GetPosition().Length();
-    float randomAngle = LucKey::RandomSign() * Random(extraAngle, 5.0f+extraAngle);
+    float extraAngle = rootNode_->GetPosition().Length();
+    extraAngle *= extraAngle;
+    float randomAngle = LucKey::RandomSign() * Random(extraAngle, 23.0f+extraAngle);
     Vector3 planarDirection = (rootNode_->GetDirection() * (Vector3::ONE-Vector3::UP)).Normalized();
     Vector3 newTarget = rootNode_->GetPosition() + (Random(2.0f, 3.0f) * (Quaternion(randomAngle, Vector3::UP) * planarDirection));
-    newTarget.y_ = Clamp(target_.y_ + Random(-0.23f, 0.23f), -2.0, 2.0f);
-    newTarget *= 0.75f;
+    newTarget.y_ = Clamp(target_.y_ + Random(-0.23f, 0.23f), -1.0, 1.0f);
+    newTarget *= 0.8f;
     return newTarget;
 }

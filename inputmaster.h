@@ -1,29 +1,20 @@
-/* LucKey Productions Urho3D Project Template
+/* Brixtuff
+// Copyright (C) 2015 LucKey Productions (luckeyproductions.nl)
 //
-// This is free and unencumbered software released into the public domain.
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+// Commercial licenses are available through frode@lindeijer.nl
 //
-// Anyone is free to copy, modify, publish, use, compile, sell, or
-// distribute this software, either in source code form or as a compiled
-// binary, for any purpose, commercial or non-commercial, and by any
-// means.
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
 //
-// In jurisdictions that recognize copyright laws, the author or authors
-// of this software dedicate any and all copyright interest in the
-// software to the public domain. We make this dedication for the benefit
-// of the public at large and to the detriment of our heirs and
-// successors. We intend this dedication to be an overt act of
-// relinquishment in perpetuity of all present and future rights to this
-// software under copyright law.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-// IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-// OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-// ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-// OTHER DEALINGS IN THE SOFTWARE.
-//
-// For more information, please refer to <http://unlicense.org/>
+// You should have received a copy of the GNU General Public License along
+// with this program; if not, write to the Free Software Foundation, Inc.,
+// 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
 #ifndef INPUTMASTER_H
@@ -31,38 +22,56 @@
 
 #include <Urho3D/Urho3D.h>
 #include "mastercontrol.h"
+#include "controllable.h"
 
-namespace Urho3D {
-class Drawable;
-class Node;
-class Scene;
-class Sprite;
-}
+enum class MasterInputAction { UP, RIGHT, DOWN, LEFT, CONFIRM, CANCEL, PAUSE, MENU, SCREENSHOT };
+enum class PlayerInputAction { MOVE_UP, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT, JUMP, SPIT,
+                               FIRE_N, FIRE_NE, FIRE_E, FIRE_SE,
+                               FIRE_S, FIRE_SW, FIRE_W, FIRE_NW };
 
-using namespace Urho3D;
+struct InputActions {
+    Vector<MasterInputAction> master_;
+    HashMap<int, Vector<PlayerInputAction>> player_;
+};
 
-enum class JoystickButton {SELECT, LEFTSTICK, RIGHTSTICK, START, DPAD_UP, DPAD_RIGHT, DPAD_DOWN, DPAD_LEFT, L2, R2, L1, R1, TRIANGLE, CIRCLE, CROSS, SQUARE};
+class Player;
 
 class InputMaster : public Object
 {
-    OBJECT(InputMaster);
+    URHO3D_OBJECT(InputMaster, Object);
 public:
-    InputMaster(Context* context, MasterControl* masterControl);
-    WeakPtr<Node> firstHit_;
+    InputMaster(Context* context);
+    void SetPlayerControl(Player *player, Controllable* controllable);
+    Player *GetPlayerByControllable(Controllable* controllable);
+    Controllable*  GetControllableByPlayer(int playerId);
+    Vector<Controllable*>  GetControllables() { return controlledByPlayer_.Values(); }
+
 private:
-    MasterControl* masterControl_;
-    Input* input_;
+    HashMap<int, MasterInputAction> keyBindingsMaster_;
+    HashMap<int, MasterInputAction> buttonBindingsMaster_;
+    HashMap<int, HashMap<int, PlayerInputAction> > keyBindingsPlayer_;
+    HashMap<int, HashMap<int, PlayerInputAction> > buttonBindingsPlayer_;
 
-    HashSet<int> pressedKeys_;
-    HashSet<int> pressedMouseButtons_;
-    HashSet<int> pressedJoystickButtons_;
+    Vector<int> pressedKeys_;
+    HashMap<int, Vector<LucKey::SixaxisButton> > pressedJoystickButtons_;
+    HashMap<int, HashMap<int, float> > axesPosition_;
 
+    HashMap<int, Controllable*> controlledByPlayer_;
+
+    void HandleUpdate(StringHash eventType, VariantMap &eventData);
     void HandleKeyDown(StringHash eventType, VariantMap &eventData);
     void HandleKeyUp(StringHash eventType, VariantMap &eventData);
-    void HandleMouseButtonDown(StringHash eventType, VariantMap &eventData);
-    void HandleMouseButtonUp(StringHash eventType, VariantMap &eventData);
     void HandleJoystickButtonDown(StringHash eventType, VariantMap &eventData);
     void HandleJoystickButtonUp(StringHash eventType, VariantMap &eventData);
+    void HandleJoystickAxisMove(StringHash eventType, VariantMap& eventData);
+
+    void HandleActions(const InputActions &actions);
+    void HandlePlayerAction(PlayerInputAction action, int playerId);
+    Vector3 GetMoveFromActions(Vector<PlayerInputAction>* actions);
+    Vector3 GetAimFromActions(Vector<PlayerInputAction>* actions);
+    void Screenshot();
+
+    void PauseButtonPressed();
 };
 
 #endif // INPUTMASTER_H

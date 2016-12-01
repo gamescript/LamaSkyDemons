@@ -1,29 +1,19 @@
-/* LucKey Productions Urho3D Project Template
+/* Brixtuff
+// Copyright (C) 2016 LucKey Productions (luckeyproductions.nl)
 //
-// This is free and unencumbered software released into the public domain.
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
 //
-// Anyone is free to copy, modify, publish, use, compile, sell, or
-// distribute this software, either in source code form or as a compiled
-// binary, for any purpose, commercial or non-commercial, and by any
-// means.
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
 //
-// In jurisdictions that recognize copyright laws, the author or authors
-// of this software dedicate any and all copyright interest in the
-// software to the public domain. We make this dedication for the benefit
-// of the public at large and to the detriment of our heirs and
-// successors. We intend this dedication to be an overt act of
-// relinquishment in perpetuity of all present and future rights to this
-// software under copyright law.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-// IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-// OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-// ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-// OTHER DEALINGS IN THE SOFTWARE.
-//
-// For more information, please refer to <http://unlicense.org/>
+// You should have received a copy of the GNU General Public License along
+// with this program; if not, write to the Free Software Foundation, Inc.,
+// 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
 #ifndef MASTERCONTROL_H
@@ -41,12 +31,13 @@ class Sprite;
 
 using namespace Urho3D;
 
-class TemplateCam;
+class BrixtuffCam;
+class Player;
 class InputMaster;
 
 typedef struct GameWorld
 {
-    SharedPtr<TemplateCam> camera;
+    SharedPtr<BrixtuffCam> camera;
     SharedPtr<Scene> scene;
     struct {
         SharedPtr<Node> sceneCursor;
@@ -57,24 +48,35 @@ typedef struct GameWorld
 
 class MasterControl : public Application
 {
-    OBJECT(MasterControl);
+    URHO3D_OBJECT(MasterControl, Application);
     friend class InputMaster;
 public:
     MasterControl(Context* context);
+    static MasterControl* GetInstance();
     GameWorld world;
-    SharedPtr<ResourceCache> cache_;
-    SharedPtr<Graphics> graphics_;
 
-    /// Setup before engine initialization. Modifies the engine paramaters.
+    Vector< SharedPtr<Player> > players_;
+    Vector< SharedPtr<Player> > GetPlayers() const;
+    Player* GetPlayer(int playerId) const;
+
+    Vector< SharedPtr<BrixtuffCam> > cameras_;
+
+    Material* GetMaterial(String name) const;
+    Model* GetModel(String name) const;
+    Texture* GetTexture(String name) const;
+    Sound* GetMusic(String name) const;
+    Sound* GetSample(String name) const;
+
     virtual void Setup();
-    /// Setup after engine initialization.
     virtual void Start();
-    /// Cleanup after the main loop. Called by Application.
     virtual void Stop();
 
     void Exit();
     void CreateLights();
+    BrixtuffCam *GetCamera(int playerId) const;
+    Vector<SharedPtr<BrixtuffCam> > GetCameras() const;
 private:
+    static MasterControl* instance_;
     Node* movingLightNode_;
 
     void CreateScene();

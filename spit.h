@@ -13,6 +13,7 @@ public:
     virtual void OnNodeSet(Node* node);
     virtual void Update(float timeStep);
     virtual void Set(Vector3 position);
+    void HandleNodeCollisionStart(StringHash eventType, VariantMap& eventData);
 };
 
 #endif // SPIT_H

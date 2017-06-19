@@ -19,6 +19,7 @@
 #include "spawnmaster.h"
 #include "player.h"
 #include "spit.h"
+#include "gravity.h"
 
 #include "lama.h"
 
@@ -37,14 +38,22 @@ void Lama::OnNodeSet(Node* node)
 { (void)node;
 
     Controllable::OnNodeSet(node_);
+    pitchNode_ = node_->CreateChild("Camera");
+    pitchNode_->SetPosition(Vector3(0.0f, 0.35f, 0.1f));
 
-    rigidBody_->SetMass(1.0f);
+    rigidBody_->SetMass(5.0f);
     rigidBody_->SetAngularFactor(Vector3::UP);
-    rigidBody_->SetFriction(0.5f);
-    rigidBody_->SetAngularDamping(5.0f);
-    rigidBody_->SetRestitution(0.1f);
+    rigidBody_->SetFriction(0.9f);
+    rigidBody_->SetRollingFriction(0.0f);
+    rigidBody_->SetAngularDamping(2342.0f);
+    rigidBody_->SetAngularRestThreshold(1.0f);
+    rigidBody_->SetRestitution(0.0f);
+    rigidBody_->SetLinearDamping(0.0f);
+    rigidBody_->SetCollisionLayer(1);
 
-    collisionShape_->SetCapsule(0.23f, 0.32f, Vector3::UP * 0.16f);
+    node_->CreateComponent<Gravity>();
+
+    collisionShape_->SetCapsule(0.42f, 1.0f, Vector3::UP * 0.23f);
     model_->SetModel(MC->GetModel("Lama"));
     SharedPtr<Material> mat{ MC->GetMaterial("Basic")->Clone() };
     Color color{};
@@ -61,38 +70,55 @@ void Lama::Update(float timeStep)
     sinceJump_ += timeStep;
     sinceSpit_ += timeStep;
 
+    rigidBody_->ApplyForce(node_->GetDirection() * timeStep * 9000.0f * move_.z_);
+    rigidBody_->ApplyForce(node_->GetRight() * timeStep * 9000.0f * move_.x_);
+
     PODVector<RigidBody*> colliders{};
     rigidBody_->GetCollidingBodies(colliders);
 
     if (colliders.Size() && sinceJump_ > jumpInterval_){
         if (actions_[0]){
-            rigidBody_->ApplyImpulse(4.2f * Vector3::UP);
+            rigidBody_->ApplyImpulse(42.0f * node_->GetUp());
             sinceJump_ = 0.0f;
-        } else if (move_.z_ != 0.0f || move_.x_ != 0){
-            rigidBody_->ApplyImpulse(0.5f * (move_.z_ * node_->GetDirection() + move_.x_ * node_->GetRight() + Vector3::UP));
+        } /*else if (move_.z_ != 0.0f || move_.x_ != 0){
+            rigidBody_->ApplyImpulse(2.3f * (move_.z_ * node_->GetDirection() + move_.x_ * node_->GetRight() + Vector3::UP));
             sinceJump_ = 0.0f;
-        }
+        }*/
     } else {
-        rigidBody_->ApplyForce(timeStep * 23.0f * (move_.z_ * node_->GetDirection() + move_.x_ * node_->GetRight() + Vector3::UP * actions_[0]));
+        rigidBody_->ApplyForce(timeStep * (235.0f - (GetLinearVelocity() - node_->GetDirection() * GetLinearVelocity().Length()).Length()) * (move_.z_ * node_->GetDirection() + move_.x_ * node_->GetRight() + Vector3::UP * actions_[0]));
     }
 
     if (GetPlayer() && GetPlayer()->GetPlayerId() == 1){
 
-        node_->Rotate(Quaternion(0.0f, INPUT->GetMouseMoveX() + 5.0f * aim_.x_, 0.0f), TS_WORLD);
-        node_->Rotate(Quaternion(INPUT->GetMouseMoveY() - 5.0f * aim_.z_, 0.0f, 0.0f));
+        node_->Rotate(Quaternion(INPUT->GetMouseMoveX() * 0.23f + 5.0f * aim_.x_, -node_->GetWorldPosition().Normalized()), TS_WORLD);
+        pitchNode_->Rotate(Quaternion(INPUT->GetMouseMoveY()* 0.23f - 5.0f * aim_.z_, Vector3::RIGHT));
+
     }
+
 
     if (actions_[1] && sinceSpit_ > spitInterval_)
     {
         Spit* spit{ GetSubsystem<SpawnMaster>()->Create<Spit>() };
-        spit->GetNode()->SetDirection(node_->GetDirection());
-        spit->Set(node_->GetPosition() + Vector3::UP * 0.32f);
+        spit->GetNode()->SetDirection(GetPitchNode()->GetWorldDirection() - GetPitchNode()->GetWorldPosition() * 0.01f);
+        spit->Set(GetPitchNode()->GetWorldPosition() * 1.01f);
 
         sinceSpit_ = 0.0f;
     }
 }
 
-
+void Lama::PostUpdate(float timeStep)
+{
+    float angleDelta{ node_->GetUp().Angle(-node_->GetWorldPosition())};
+    if (angleDelta > 23e-5) {
+//        node_->RotateAround(node_->GetWorldPosition() + Vector3::UP * 0.21f, Quaternion::IDENTITY.Slerp(Quaternion(node_->GetUp(), -node_->GetWorldPosition().Normalized()), Clamp(timeStep * 23.0f * angleDelta, 0.0f, 1.0f)), TS_WORLD);
+        node_->LookAt(Vector3::ZERO, Quaternion(90.0f, node_->GetRight()) * node_->GetWorldPosition().Normalized());
+        node_->Rotate(Quaternion(90.0f, Vector3::RIGHT));
+//        Quaternion rot{};
+//        rot.FromLookRotation(-node_->GetWorldPosition().Normalized(), -node_->GetDirection());
+//        rot = Quaternion(90.0f, node_->GetRight())
+//        node_->SetRotation(rot);
+    }
+}
 
 
 

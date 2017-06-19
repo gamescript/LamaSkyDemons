@@ -17,6 +17,8 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+#include "gravity.h"
+
 #include "spit.h"
 
 void Spit::RegisterObject(Context* context)
@@ -34,7 +36,15 @@ void Spit::OnNodeSet(Node* node)
     StaticModel* model{ node_->CreateComponent<StaticModel>() };
     model->SetModel(MC->GetModel("Spit"));
     model->SetMaterial(MC->GetMaterial("Spit"));
-    node_->CreateComponent<RigidBody>()->SetMass(0.5f);
+    RigidBody* spitBody{ node_->CreateComponent<RigidBody>() };
+    spitBody->SetMass(0.5f);
+    spitBody->SetRestitution(0.9f);
+    spitBody->SetCollisionMask(M_MAX_UNSIGNED - 1);
+    node_->CreateComponent<CollisionShape>()->SetSphere(0.5f);
+
+    node_->CreateComponent<Gravity>();
+
+    SubscribeToEvent(node_, E_NODECOLLISIONSTART, URHO3D_HANDLER(Spit, HandleNodeCollisionStart));
 }
 
 void Spit::Set(Vector3 position)
@@ -49,4 +59,9 @@ void Spit::Set(Vector3 position)
 void Spit::Update(float timeStep)
 {
     node_->SetDirection(node_->GetComponent<RigidBody>()->GetLinearVelocity().Normalized());
+}
+
+void Spit::HandleNodeCollisionStart(StringHash eventType, VariantMap& eventData)
+{
+    Disable();
 }

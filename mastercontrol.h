@@ -35,17 +35,6 @@ class BrixtuffCam;
 class Player;
 class InputMaster;
 
-typedef struct GameWorld
-{
-    SharedPtr<BrixtuffCam> camera;
-    SharedPtr<Scene> scene;
-    struct {
-        SharedPtr<Node> sceneCursor;
-        SharedPtr<Cursor> uiCursor;
-        PODVector<RayQueryResult> hitResults;
-    } cursor;
-} GameWorld;
-
 class MasterControl : public Application
 {
     URHO3D_OBJECT(MasterControl, Application);
@@ -53,13 +42,15 @@ class MasterControl : public Application
 public:
     MasterControl(Context* context);
     static MasterControl* GetInstance();
-    GameWorld world;
 
     Vector< SharedPtr<Player> > players_;
     Vector< SharedPtr<Player> > GetPlayers() const;
     Player* GetPlayer(int playerId) const;
 
     Vector< SharedPtr<BrixtuffCam> > cameras_;
+
+    Scene* scene_;
+    Scene* GetScene() const { return scene_; }
 
     Material* GetMaterial(String name) const;
     Model* GetModel(String name) const;
@@ -75,6 +66,9 @@ public:
     void CreateLights();
     BrixtuffCam *GetCamera(int playerId) const;
     Vector<SharedPtr<BrixtuffCam> > GetCameras() const;
+    float Sine(const float freq, const float min, const float max, const float shift);
+    float Cosine(const float freq, const float min, const float max, const float shift);
+    float SinePhase(float freq, float shift);
 private:
     static MasterControl* instance_;
     Node* movingLightNode_;

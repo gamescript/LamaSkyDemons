@@ -30,7 +30,11 @@ public:
     static void RegisterObject(Context* context);
     virtual void Update(float timeStep);
     virtual void OnNodeSet(Node* node);
+
+    Node* GetPitchNode() const { return pitchNode_; }
+    void PostUpdate(float tiemStep);
 private:
+    Node* pitchNode_;
     float sinceJump_;
     float jumpInterval_;
 

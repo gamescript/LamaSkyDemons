@@ -20,6 +20,7 @@
 #include "inputmaster.h"
 #include "spawnmaster.h"
 #include "brixtuffcam.h"
+#include "gravity.h"
 #include "platform.h"
 #include "lama.h"
 #include "spit.h"
@@ -54,6 +55,7 @@ void MasterControl::Setup()
 }
 void MasterControl::Start()
 {
+    Gravity::RegisterObject(context_);
     Platform::RegisterObject(context_);
     Lama::RegisterObject(context_);
     Spit::RegisterObject(context_);
@@ -66,7 +68,7 @@ void MasterControl::Start()
     //Play music
     Sound* music{ CACHE->GetResource<Sound>("Resources/Music/Urho - Disciples of Urho.ogg") };
     music->SetLooped(true);
-    Node* musicNode{ world.scene->CreateChild("Music") };
+    Node* musicNode{ scene_->CreateChild("Music") };
     SoundSource* musicSource{ musicNode->CreateComponent<SoundSource>() };
     musicSource->SetSoundType(SOUND_MUSIC);
 //    musicSource->Play(music);
@@ -83,26 +85,30 @@ void MasterControl::Exit()
 
 void MasterControl::CreateScene()
 {
-    world.scene = new Scene(context_);
-    world.scene->CreateComponent<Octree>();
+    scene_ = new Scene(context_);
+    scene_->CreateComponent<Octree>();
+    PhysicsWorld* physicsWorld{ scene_->CreateComponent<PhysicsWorld>() };
+    physicsWorld->SetGravity(Vector3::ZERO);
+    physicsWorld->SetFps(50);
 //    world.camera = new BrixtuffCam(context_, this);
     CreateLights();
 
-    Node* platformNode{ world.scene->CreateChild("Platform") };
+
+    Node* platformNode{ scene_->CreateChild("Platform") };
     platformNode->CreateComponent<Platform>();
 
-    for (int p : {1, 2, 3, 4}){
+    for (int p : {1}){//, 2, 3, 4}){
         players_.Push(SharedPtr<Player>(new Player(p, context_)));
 
         Lama* lama{ GetSubsystem<SpawnMaster>()->Create<Lama>() };
-        lama->Set(Vector3::UP * 5.0f);
+        lama->Set(Vector3::DOWN * 5.0f);
 
         GetSubsystem<InputMaster>()->SetPlayerControl(GetPlayer(p), lama);
 
         BrixtuffCam* cam{ new BrixtuffCam(context_) };
         cam->playerId_ = p;
-        cam->rootNode_->SetParent(lama->GetNode());
-        cam->rootNode_->SetPosition(Vector3::UP * 0.35f + Vector3::FORWARD * 0.1f);
+        cam->rootNode_->SetParent(lama->GetPitchNode());
+        cam->rootNode_->SetPosition(Vector3::ZERO);
         cameras_.Push(SharedPtr<BrixtuffCam>(cam));
     }
 
@@ -115,8 +121,18 @@ void MasterControl::CreateScene()
 
 void MasterControl::CreateLights()
 {
+    Node* sunLightNode{ scene_->CreateChild("CentralLight") };
+    Light* sunLight{ sunLightNode->CreateComponent<Light>() };
+    sunLight->SetLightType(LIGHT_DIRECTIONAL);
+    sunLight->SetRange(200.0f);
+    sunLight->SetBrightness(0.5f);
+    sunLight->SetCastShadows(true);
+    sunLight->SetShadowDistance(10.0f);
+    sunLight->SetFadeDistance(1.0f);
+    sunLight->SetShadowIntensity(0.7f);
+            /*
     //Add a directional light to the world. Enable cascaded shadows on it
-    Node* downardsLightNode = world.scene->CreateChild("DirectionalLight");
+    Node* downardsLightNode = scene_->CreateChild("DirectionalLight");
     downardsLightNode->SetPosition(Vector3(-2.0f, 10.0f, -5.0f));
     downardsLightNode->LookAt(Vector3(0.0f, 0.0f, 0.0f));
     Light* downwardsLight = downardsLightNode->CreateComponent<Light>();
@@ -127,9 +143,9 @@ void MasterControl::CreateLights()
     downwardsLight->SetShadowIntensity(0.23f);
     downwardsLight->SetShadowBias(BiasParameters(0.000025f, 0.5f));
     downwardsLight->SetShadowCascade(CascadeParameters(1.0f, 5.0f, 23.0f, 100.0f, 0.8f));
-
+*/
     //Add a directional light to the world. Enable cascaded shadows on it
-    /*Node* upwardsLightNode = world.scene->CreateChild("DirectionalLight");
+    /*Node* upwardsLightNode = scene_->CreateChild("DirectionalLight");
     upwardsLightNode->SetPosition(Vector3(3.0f, 2.0f, 5.0f));
     upwardsLightNode->LookAt(Vector3(0.0f, 0.0f, 0.0f));
     Light* upwardsLight = upwardsLightNode->CreateComponent<Light>();
@@ -139,7 +155,7 @@ void MasterControl::CreateLights()
     upwardsLight->SetColor(Color(0.23f, 0.666f, 1.0f));
 
     //Create a point light. Enable cascaded shadows on it
-    Node* pointLightNode_ = world.scene->CreateChild("MovingLight");
+    Node* pointLightNode_ = scene_->CreateChild("MovingLight");
     pointLightNode_->SetPosition(Vector3(0.0f, 23.0f, 0.0f));
     Light* pointLight = pointLightNode_->CreateComponent<Light>();
     pointLight->SetCastShadows(true);

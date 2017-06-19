@@ -21,26 +21,27 @@
 BrixtuffCam::BrixtuffCam(Context *context):
     Object(context)
 {
-    rootNode_ = MC->world.scene->CreateChild("Camera");
+    rootNode_ = MC->scene_->CreateChild("Camera");
     camera_ = rootNode_->CreateComponent<Camera>();
     camera_->SetFarClip(1024.0f);
     camera_->SetNearClip(0.05f);
-//    rootNode_->SetPosition(Vector3(0.0f, 1.0f, -13.0f));
-//    rootNode_->SetRotation(Quaternion(10.0f, 0.0f, 0.0f));
+    camera_->SetFov(120);
+
+//    rootNode_->CreateComponent<Light>()->SetRadius(256.0f);
 }
 
 void BrixtuffCam::SetupViewport()
 {
 
     //Set up a viewport to the Renderer subsystem so that the 3D scene can be seen
-    SharedPtr<Viewport> viewport(new Viewport(context_, MC->world.scene, camera_));
+    SharedPtr<Viewport> viewport(new Viewport(context_, MC->scene_, camera_));
     viewport_ = viewport;
-    int width{ GRAPHICS->GetWidth() / 2 };
-    int height{ GRAPHICS->GetHeight() / 2 };
-    viewport_->SetRect(IntRect(((playerId_ - 1) % 2) * width,
-                               ((playerId_ - 1) / 2) * height,
-                               (((playerId_ - 1) % 2) * width) + width,
-                               (((playerId_ - 1) / 2) * height) + height));
+//    int width{ GRAPHICS->GetWidth() / 2 };
+//    int height{ GRAPHICS->GetHeight() / 2 };
+//    viewport_->SetRect(IntRect(((playerId_ - 1) % 2) * width,
+//                               ((playerId_ - 1) / 2) * height,
+//                               (((playerId_ - 1) % 2) * width) + width,
+//                               (((playerId_ - 1) / 2) * height) + height));
 
     //Add anti-asliasing and bloom
     effectRenderPath_ = viewport_->GetRenderPath()->Clone();
@@ -48,7 +49,7 @@ void BrixtuffCam::SetupViewport()
     effectRenderPath_->SetEnabled("FXAA3", true);
     effectRenderPath_->Append(CACHE->GetResource<XMLFile>("PostProcess/BloomHDR.xml"));
     effectRenderPath_->SetShaderParameter("BloomHDRThreshold", 0.23f);
-    effectRenderPath_->SetShaderParameter("BloomHDRMix", Vector2(1.75f, 1.25f));
+    effectRenderPath_->SetShaderParameter("BloomHDRMix", Vector2(0.75f, 0.5f));
     effectRenderPath_->SetEnabled("BloomHDR", true);
 
     Renderer* renderer{ GetSubsystem<Renderer>() };

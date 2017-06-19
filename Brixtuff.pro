@@ -27,7 +27,8 @@ HEADERS += \
     controllable.h \
     lama.h \
     platform.h \
-    spit.h
+    spit.h \
+    gravity.h
 
 SOURCES += \
     luckey.cpp \
@@ -40,4 +41,5 @@ SOURCES += \
     controllable.cpp \
     lama.cpp \
     platform.cpp \
-    spit.cpp
+    spit.cpp \
+    gravity.cpp

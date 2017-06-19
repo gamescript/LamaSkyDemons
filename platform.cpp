@@ -33,10 +33,25 @@ void Platform::OnNodeSet(Node* node)
 
     Zone* zone = node_->CreateComponent<Zone>();
     zone->SetFogStart(23.0f);
-    zone->SetFogEnd(123.0f);
+    zone->SetFogEnd(128.0f);
+    zone->SetFogColor(Color(0.8f, 0.9f, 1.0f));
     zone->SetBoundingBox(BoundingBox(Vector3::ONE * -1000.0f, Vector3::ONE * 1000.0f));
-//    node_->SetScale(Vector3(5.0f, 0.23f, 5.0f));
+    zone->SetAmbientColor(Color(0.4f, 0.45f, 0.5f));
 
+//    node_->CreateComponent<Skybox>()->SetMaterial();
+
+    StaticModel* terrain{ node_->CreateComponent<StaticModel>() };
+    terrain->SetModel(MC->GetModel("Level1"));
+    terrain->SetMaterial(MC->GetMaterial("VCol"));
+    terrain->SetOccludee(false);
+    terrain->SetCastShadows(true);
+
+    node_->CreateComponent<RigidBody>()->SetFriction(1.0f);
+
+    CollisionShape* terrainCollider{ node_->CreateComponent<CollisionShape>() };
+    terrainCollider->SetTriangleMesh(MC->GetModel("Level1"));
+//    node_->SetScale(Vector3(5.0f, 0.23f, 5.0f));
+/*
     for (int i{-23}; i < 23; ++i){
         for (int j{-23}; j < 23; ++j){
             for (int k{0}; k < Random(5, 2 * Abs(i + j) + 5) + !Random(5) * Random(5); ++k){
@@ -64,11 +79,12 @@ void Platform::OnNodeSet(Node* node)
             }
         }
     }
+    */
 }
 
 void Platform::Update(float timeStep)
 {
-    node_->GetComponent<Zone>()->SetFogColor((Color(0.23f, 0.23f, 0.23f) + LucKey::RandomColor()) * 0.05f);
+//    node_->GetComponent<Zone>()->SetFogColor((Color(0.23f, 0.23f, 0.23f) + LucKey::RandomColor()) * 0.05f * MC->Sine);
 }
 
 

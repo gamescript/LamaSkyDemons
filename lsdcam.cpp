@@ -16,9 +16,9 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "brixtuffcam.h"
+#include "lsdcam.h"
 
-BrixtuffCam::BrixtuffCam(Context *context):
+LSDCam::LSDCam(Context *context):
     Object(context)
 {
     rootNode_ = MC->scene_->CreateChild("Camera");
@@ -28,7 +28,7 @@ BrixtuffCam::BrixtuffCam(Context *context):
     camera_->SetFov(100);
 }
 
-void BrixtuffCam::SetupViewport()
+void LSDCam::SetupViewport()
 {
 
     //Set up a viewport to the Renderer subsystem so that the 3D scene can be seen
@@ -56,12 +56,12 @@ void BrixtuffCam::SetupViewport()
     renderer->SetViewport(playerId_ - 1, viewport_);
 }
 
-Vector3 BrixtuffCam::GetWorldPosition()
+Vector3 LSDCam::GetWorldPosition()
 {
     return rootNode_->GetWorldPosition();
 }
 
-Quaternion BrixtuffCam::GetRotation()
+Quaternion LSDCam::GetRotation()
 {
     return rootNode_->GetRotation();
 }

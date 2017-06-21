@@ -31,7 +31,7 @@ class Sprite;
 
 using namespace Urho3D;
 
-class BrixtuffCam;
+class LSDCam;
 class Player;
 class InputMaster;
 
@@ -47,7 +47,7 @@ public:
     Vector< SharedPtr<Player> > GetPlayers() const;
     Player* GetPlayer(int playerId) const;
 
-    Vector< SharedPtr<BrixtuffCam> > cameras_;
+    Vector< SharedPtr<LSDCam> > cameras_;
 
     Scene* scene_;
     Scene* GetScene() const { return scene_; }
@@ -64,8 +64,8 @@ public:
 
     void Exit();
     void CreateLights();
-    BrixtuffCam *GetCamera(int playerId) const;
-    Vector<SharedPtr<BrixtuffCam> > GetCameras() const;
+    LSDCam *GetCamera(int playerId) const;
+    Vector<SharedPtr<LSDCam> > GetCameras() const;
     float Sine(const float freq, const float min, const float max, const float shift);
     float Cosine(const float freq, const float min, const float max, const float shift);
     float SinePhase(float freq, float shift);

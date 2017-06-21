@@ -22,13 +22,13 @@ HEADERS += \
     mastercontrol.h \
     inputmaster.h \
     spawnmaster.h \
-    brixtuffcam.h \
     player.h \
     controllable.h \
     lama.h \
     platform.h \
     spit.h \
-    gravity.h
+    gravity.h \
+    lsdcam.h
 
 SOURCES += \
     luckey.cpp \
@@ -36,10 +36,10 @@ SOURCES += \
     mastercontrol.cpp \
     inputmaster.cpp \
     spawnmaster.cpp \
-    brixtuffcam.cpp \
     player.cpp \
     controllable.cpp \
     lama.cpp \
     platform.cpp \
     spit.cpp \
-    gravity.cpp
+    gravity.cpp \
+    lsdcam.cpp

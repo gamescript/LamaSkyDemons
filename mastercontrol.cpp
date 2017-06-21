@@ -19,7 +19,7 @@
 #include "mastercontrol.h"
 #include "inputmaster.h"
 #include "spawnmaster.h"
-#include "brixtuffcam.h"
+#include "lsdcam.h"
 #include "gravity.h"
 #include "platform.h"
 #include "lama.h"
@@ -105,14 +105,14 @@ void MasterControl::CreateScene()
 
         GetSubsystem<InputMaster>()->SetPlayerControl(GetPlayer(p), lama);
 
-        BrixtuffCam* cam{ new BrixtuffCam(context_) };
+        LSDCam* cam{ new LSDCam(context_) };
         cam->playerId_ = p;
         cam->rootNode_->SetParent(lama->GetPitchNode());
         cam->rootNode_->SetPosition(Vector3::ZERO);
-        cameras_.Push(SharedPtr<BrixtuffCam>(cam));
+        cameras_.Push(SharedPtr<LSDCam>(cam));
     }
 
-    for (BrixtuffCam* c : cameras_){
+    for (LSDCam* c : cameras_){
         c->SetupViewport();
     }
 
@@ -178,12 +178,12 @@ Player* MasterControl::GetPlayer(int playerId) const
     return nullptr;
 }
 
-Vector<SharedPtr<BrixtuffCam> > MasterControl::GetCameras() const {
+Vector<SharedPtr<LSDCam> > MasterControl::GetCameras() const {
     return cameras_;
 }
-BrixtuffCam* MasterControl::GetCamera(int playerId) const
+LSDCam* MasterControl::GetCamera(int playerId) const
 {
-    for (BrixtuffCam* c : cameras_) {
+    for (LSDCam* c : cameras_) {
 
         if (c->GetPlayerId() == playerId)
             return c;

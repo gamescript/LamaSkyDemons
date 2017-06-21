@@ -17,7 +17,7 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "brixtuffcam.h"
+#include "lsdcam.h"
 #include "player.h"
 
 #include "inputmaster.h"

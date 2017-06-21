@@ -34,13 +34,13 @@ class Camera;
 
 using namespace Urho3D;
 
-class BrixtuffCam : public Object
+class LSDCam : public Object
 {
-    URHO3D_OBJECT(BrixtuffCam, Object);
+    URHO3D_OBJECT(LSDCam, Object);
     friend class MasterControl;
     friend class InputMaster;
 public:
-    BrixtuffCam(Context *context);
+    LSDCam(Context *context);
 
     SharedPtr<Camera> camera_;
     SharedPtr<Viewport> viewport_;

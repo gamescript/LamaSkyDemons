@@ -33,6 +33,7 @@ public:
 
     Node* GetPitchNode() const { return pitchNode_; }
     void PostUpdate(float tiemStep);
+    virtual void HandleAction(int actionId);
 private:
     Node* pitchNode_;
     float sinceJump_;

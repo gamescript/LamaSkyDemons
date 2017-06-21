@@ -63,5 +63,5 @@ void Spit::Update(float timeStep)
 
 void Spit::HandleNodeCollisionStart(StringHash eventType, VariantMap& eventData)
 {
-    Disable();
+//    Disable();
 }

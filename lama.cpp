@@ -70,15 +70,15 @@ void Lama::Update(float timeStep)
     sinceJump_ += timeStep;
     sinceSpit_ += timeStep;
 
-    rigidBody_->ApplyForce(node_->GetDirection() * timeStep * 9000.0f * move_.z_);
-    rigidBody_->ApplyForce(node_->GetRight() * timeStep * 9000.0f * move_.x_);
+    rigidBody_->ApplyForce(timeStep * 20000.0f * (node_->GetDirection() * move_.z_ +
+                                                  node_->GetRight() * move_.x_));
 
     PODVector<RigidBody*> colliders{};
     rigidBody_->GetCollidingBodies(colliders);
 
     if (colliders.Size() && sinceJump_ > jumpInterval_){
         if (actions_[0]){
-            rigidBody_->ApplyImpulse(42.0f * node_->GetUp());
+            rigidBody_->ApplyImpulse(42000.0f * node_->GetUp());
             sinceJump_ = 0.0f;
         } /*else if (move_.z_ != 0.0f || move_.x_ != 0){
             rigidBody_->ApplyImpulse(2.3f * (move_.z_ * node_->GetDirection() + move_.x_ * node_->GetRight() + Vector3::UP));
@@ -91,7 +91,7 @@ void Lama::Update(float timeStep)
     if (GetPlayer() && GetPlayer()->GetPlayerId() == 1){
 
         node_->Rotate(Quaternion(INPUT->GetMouseMoveX() * 0.23f + 5.0f * aim_.x_, -node_->GetWorldPosition().Normalized()), TS_WORLD);
-        pitchNode_->Rotate(Quaternion(INPUT->GetMouseMoveY()* 0.23f - 5.0f * aim_.z_, Vector3::RIGHT));
+        pitchNode_->Rotate(Quaternion(INPUT->GetMouseMoveY() * 0.23f - 5.0f * aim_.z_, Vector3::RIGHT));
 
     }
 
@@ -104,6 +104,12 @@ void Lama::Update(float timeStep)
 
         sinceSpit_ = 0.0f;
     }
+}
+
+void Lama::HandleAction(int actionId)
+{
+
+    rigidBody_->ApplyImpulse(100.0f * node_->GetUp());
 }
 
 void Lama::PostUpdate(float timeStep)

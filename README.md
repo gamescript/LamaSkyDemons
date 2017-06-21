@@ -1,2 +1,3 @@
-# [:four_leaf_clover:] (http://www.luckeyproductions.nl/) Urho3DQtemplate
-This is an unlicensed Urho3D QtCreator project template. Free for anyone to use.
+# [:four_leaf_clover:](https://www.LucKeyProductions.nl) LamaSkyDemons
+
+A trippy first-person-shooter inside a sphere.

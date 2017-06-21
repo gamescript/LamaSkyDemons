@@ -71,7 +71,7 @@ protected:
     void AlignWithVelocity(float timeStep);
     void AlignWithMovement(float timeStep);
 
-    virtual void HandleAction(int actionId) { (void)actionId; }
+    virtual void HandleAction(int actionId) = 0;
 };
 
 #endif // CONTROLLABLE_H

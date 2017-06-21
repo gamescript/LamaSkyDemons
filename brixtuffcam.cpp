@@ -25,9 +25,7 @@ BrixtuffCam::BrixtuffCam(Context *context):
     camera_ = rootNode_->CreateComponent<Camera>();
     camera_->SetFarClip(1024.0f);
     camera_->SetNearClip(0.05f);
-    camera_->SetFov(120);
-
-//    rootNode_->CreateComponent<Light>()->SetRadius(256.0f);
+    camera_->SetFov(100);
 }
 
 void BrixtuffCam::SetupViewport()

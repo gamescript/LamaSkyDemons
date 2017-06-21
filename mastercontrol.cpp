@@ -45,7 +45,7 @@ void MasterControl::Setup()
 {
     SetRandomSeed(TIME->GetSystemTime());
 
-    engineParameters_["WindowTitle"] = "Brixtuff";
+    engineParameters_["WindowTitle"] = "LamaSkyDemons";
     engineParameters_["LogName"] = GetSubsystem<FileSystem>()->GetAppPreferencesDir("urho3d", "logs")+"LucKeyTemplate.log";
     engineParameters_["ResourcePaths"] = "Data;CoreData;Resources";
     engineParameters_["WindowIcon"] = "icon.png";

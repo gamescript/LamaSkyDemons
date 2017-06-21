@@ -40,7 +40,7 @@ InputMaster::InputMaster(Context* context):
     keyBindingsPlayer_[1][KEY_S]      = PlayerInputAction::MOVE_DOWN;
     keyBindingsPlayer_[1][KEY_A]      = PlayerInputAction::MOVE_LEFT;
     keyBindingsPlayer_[1][KEY_D]      = PlayerInputAction::MOVE_RIGHT;
-    keyBindingsPlayer_[1][KEY_C]      = PlayerInputAction::JUMP;
+    keyBindingsPlayer_[1][KEY_SPACE]  = PlayerInputAction::JUMP;
     keyBindingsPlayer_[1][KEY_V]      = PlayerInputAction::SPIT;
     keyBindingsPlayer_[1][KEY_KP_8]   = PlayerInputAction::FIRE_N;
     keyBindingsPlayer_[1][KEY_KP_5]   = PlayerInputAction::FIRE_S;

@@ -1,15 +1,15 @@
-LIBS += ../Brixtuff/Urho3D/lib/libUrho3D.a \
+TARGET = lamaskydemons
+
+LIBS += ../LamaSkyDemons/Urho3D/lib/libUrho3D.a \
     -lpthread \
     -ldl \
     -lGL
 
-DEFINES += URHO3D_COMPILE_QT
-
 QMAKE_CXXFLAGS += -std=c++1y
 
 INCLUDEPATH += \
-    ../Brixtuff/Urho3D/include \
-    ../Brixtuff/Urho3D/include/Urho3D/ThirdParty \
+    ../LamaSkyDemons/Urho3D/include \
+    ../LamaSkyDemons/Urho3D/include/Urho3D/ThirdParty \
 
 TEMPLATE = app
 CONFIG += console
